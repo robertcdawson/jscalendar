@@ -16,19 +16,6 @@ let getCurrentMonthData = () => {
   // get number of days in current month
   let numberOfDaysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  // let currentMonthData = {};
-
-  // loop from 1 to number of days in current month
-  // let currentDayOfWeekInLoop = firstDayOfWeekOfCurrentMonth;
-  // for (let i = 0; i < numberOfDaysInCurrentMonth; i++) {
-  //   currentDayOfWeekInLoop = firstDayOfWeekOfCurrentMonth + i;
-  //   if (currentDayOfWeekInLoop > 6) {
-  //     currentDayOfWeekInLoop = currentDayOfWeekInLoop % 7;
-  //   }
-  //   currentMonthData["day" + (i+1)] = currentDayOfWeekInLoop;
-  // }
-
-  // return currentMonthData;
   return {
     firstDayOfWeekOfCurrentMonth: firstDayOfWeekOfCurrentMonth,
     numberOfDaysInCurrentMonth: numberOfDaysInCurrentMonth,
@@ -43,32 +30,58 @@ let makeCalendarUI = (currentMonthData) => {
 
   // get calendar container
   let calendarDiv = document.getElementById("calendar");
-  // get dayNum div, inside calendar container, that holds day of week
-  let dayNum = document.getElementsByClassName("dayNum")[0];
-  let allDayNums = document.getElementsByClassName("dayNum");
-
-  // get length/size of currentMonthData object
-  // let currentMonthDataLength = Object.keys(currentMonthData()).length;
 
   // create dayNum div elements for all days of month
-  let dayNumClone, dayNumText;
+  let dayNum;
   let currentMonthDataValues = Object.values(currentMonthData());
-
   let daysToAddToCalendar = firstDayOfCurrentMonth + numberOfDaysInCurrentMonth;
 
-  for (let i = 0; i < daysToAddToCalendar; i++) {
-    dayNumClone = allDayNums[i].cloneNode(true);
-    if (i >= firstDayOfCurrentMonth) {
-      dayNumText = document.createTextNode(i - 1);
-      dayNumClone.appendChild(dayNumText);
-    }
-    calendarDiv.insertBefore(dayNumClone, allDayNums[i]);
-  }
-  // remove statically placed initial dayNum div
-  dayNum.remove();
+  // create templated div with day number
+  let makeDayNumDiv = (dayNumTextValue) => {
 
-  // let dayNumText = document.createTextNode(i+1);
-  // dayNumClone.appendChild(dayNumText);
+    let dayNumText;
+
+    dayNum = document.createElement("div");
+    dayNum.setAttribute("class", "dayNum");
+
+    if (dayNumTextValue) {
+      dayNumText = document.createTextNode(dayNumTextValue);
+      dayNum.appendChild(dayNumText);
+    }
+
+  };
+
+  // generate day headings
+  let makeCalendarHeadings = () => {
+
+    let dayNumHeading;
+    let dayHeadings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    for (let i = 0; i < dayHeadings.length; i++) {
+      dayNumHeading = document.createElement("div");
+      dayNumHeading.setAttribute("class", "dayNumHeading");
+      dayNumHeadingText = document.createTextNode(dayHeadings[i]);
+      dayNumHeading.appendChild(dayNumHeadingText);
+      calendarDiv.insertBefore(dayNumHeading, null);
+    }
+
+  };
+
+  makeCalendarHeadings();
+
+  // generate day divs with day numbers if applicable for current month
+  for (let i = 0; i < daysToAddToCalendar; i++) {
+
+    if (i >= firstDayOfCurrentMonth) {
+      makeDayNumDiv(i - 1);
+    }
+    else {
+      makeDayNumDiv();
+    }
+
+    calendarDiv.insertBefore(dayNum, dayNum[i]);
+
+  }
 
 };
 
