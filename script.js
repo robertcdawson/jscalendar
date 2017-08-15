@@ -1,13 +1,10 @@
 // get current month
-let getCurrentMonthData = () => {
-
-  // get current date
-  let currentDate = new Date();
+let getCurrentMonthData = (datePassed) => {
 
   // get first day of current month
-  let currentYear = currentDate.getFullYear();
-  let currentMonth = currentDate.getMonth();
-  let currentDayNumber = currentDate.getDate();
+  let currentYear = datePassed.getFullYear();
+  let currentMonth = datePassed.getMonth();
+  let currentDayNumber = datePassed.getDate();
   let firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1);
 
   // get day of week for first day of current month
@@ -17,6 +14,7 @@ let getCurrentMonthData = () => {
   let numberOfDaysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
   return {
+    monthNumber: currentMonth,
     firstDayOfWeekOfCurrentMonth: firstDayOfWeekOfCurrentMonth,
     numberOfDaysInCurrentMonth: numberOfDaysInCurrentMonth,
   };
@@ -25,15 +23,24 @@ let getCurrentMonthData = () => {
 
 let makeCalendarUI = (currentMonthData) => {
 
-  let firstDayOfCurrentMonth = currentMonthData().firstDayOfWeekOfCurrentMonth;
-  let numberOfDaysInCurrentMonth = currentMonthData().numberOfDaysInCurrentMonth;
+  let monthNumber = currentMonthData.monthNumber;
+  let firstDayOfCurrentMonth = currentMonthData.firstDayOfWeekOfCurrentMonth;
+  let numberOfDaysInCurrentMonth = currentMonthData.numberOfDaysInCurrentMonth;
 
   // get calendar container
   let calendarDiv = document.getElementById("calendar");
 
+  let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  let monthNameContainer = document.createElement("h1");
+  monthNameContainer.setAttribute("id", "monthName");
+  let monthNameContainerText = document.createTextNode(monthNames[monthNumber]);
+  monthNameContainer.appendChild(monthNameContainerText);
+  document.body.insertBefore(monthNameContainer, calendarDiv);
+
   // create dayNum div elements for all days of month
   let dayNum;
-  let currentMonthDataValues = Object.values(currentMonthData());
+  let currentMonthDataValues = Object.values(currentMonthData);
   let daysToAddToCalendar = firstDayOfCurrentMonth + numberOfDaysInCurrentMonth;
 
   // create templated div with day number
@@ -85,4 +92,35 @@ let makeCalendarUI = (currentMonthData) => {
 
 };
 
-makeCalendarUI(getCurrentMonthData);
+// display month name
+
+// get current date
+let currentDate = new Date();
+
+let lastMonth = new Date(currentDate.getYear(), currentDate.getMonth()-1, currentDate.getDate());
+let nextMonth = new Date(currentDate.getYear(), currentDate.getMonth()+1, currentDate.getDate());
+
+// set last month link
+let lastMonthLink = document.createElement("a");
+lastMonthLink.setAttribute("href", "#");
+let lastMonthLinkText = document.createTextNode("< Previous Month");
+lastMonthLink.appendChild(lastMonthLinkText);
+document.body.insertBefore(lastMonthLink, null);
+
+let datePassedLastMonth = getCurrentMonthData(lastMonth);
+console.log(datePassedLastMonth.monthNumber);
+
+lastMonthLink.addEventListener("click", (event) => {
+
+  event.preventDefault();
+
+  document.getElementById("calendar").textContent = "";
+  document.getElementById("monthName").remove();
+
+  makeCalendarUI(datePassedLastMonth);
+
+});
+
+let datePassed = getCurrentMonthData(currentDate);
+
+makeCalendarUI(datePassed);
