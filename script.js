@@ -79,6 +79,7 @@ let makeCalendarUI = (currentMonthData) => {
   // generate day divs with day numbers if applicable for current month
   for (let i = 0; i < daysToAddToCalendar; i++) {
 
+    // TODO: Fix logic
     if (i >= firstDayOfCurrentMonth) {
       makeDayNumDiv(i - 1);
     }
@@ -97,8 +98,8 @@ let makeCalendarUI = (currentMonthData) => {
 // get current date
 let currentDate = new Date();
 
-let lastMonth = new Date(currentDate.getYear(), currentDate.getMonth()-1, currentDate.getDate());
-let nextMonth = new Date(currentDate.getYear(), currentDate.getMonth()+1, currentDate.getDate());
+let lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, currentDate.getDate());
+let nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, currentDate.getDate());
 
 // set last month link
 let lastMonthLink = document.createElement("a");
@@ -107,12 +108,11 @@ let lastMonthLinkText = document.createTextNode("< Previous Month");
 lastMonthLink.appendChild(lastMonthLinkText);
 document.body.insertBefore(lastMonthLink, null);
 
-let datePassedLastMonth = getCurrentMonthData(lastMonth);
-console.log(datePassedLastMonth.monthNumber);
-
 lastMonthLink.addEventListener("click", (event) => {
 
   event.preventDefault();
+
+  let datePassedLastMonth = getCurrentMonthData(lastMonth);
 
   document.getElementById("calendar").textContent = "";
   document.getElementById("monthName").remove();
