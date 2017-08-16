@@ -18,3 +18,15 @@
   font-weight: 700;
   background: #eee;
 }
+
+#lastMonthLink,
+#nextMonthLink {
+  display: block;
+  float: left;
+  width: 50%;
+  margin: 1rem 0;
+}
+
+#nextMonthLink {
+  text-align: right;
+}

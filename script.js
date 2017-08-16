@@ -15,6 +15,7 @@ let getCurrentMonthData = (datePassed) => {
 
   return {
     monthNumber: currentMonth,
+    currentYear: currentYear,
     firstDayOfWeekOfCurrentMonth: firstDayOfWeekOfCurrentMonth,
     numberOfDaysInCurrentMonth: numberOfDaysInCurrentMonth,
   };
@@ -24,6 +25,7 @@ let getCurrentMonthData = (datePassed) => {
 let makeCalendarUI = (currentMonthData) => {
 
   let monthNumber = currentMonthData.monthNumber;
+  let currentYear = currentMonthData.currentYear;
   let firstDayOfCurrentMonth = currentMonthData.firstDayOfWeekOfCurrentMonth;
   let numberOfDaysInCurrentMonth = currentMonthData.numberOfDaysInCurrentMonth;
 
@@ -34,7 +36,7 @@ let makeCalendarUI = (currentMonthData) => {
 
   let monthNameContainer = document.createElement("h1");
   monthNameContainer.setAttribute("id", "monthName");
-  let monthNameContainerText = document.createTextNode(monthNames[monthNumber]);
+  let monthNameContainerText = document.createTextNode(monthNames[monthNumber] + " " + currentYear);
   monthNameContainer.appendChild(monthNameContainerText);
   document.body.insertBefore(monthNameContainer, calendarDiv);
 
@@ -98,10 +100,11 @@ let currentDate = new Date();
 
 let makePreviousMonthLink = () => {
 
-  let lastMonth, increment = 1;
+  let lastMonth;
 
   // set last month link
   let lastMonthLink = document.createElement("a");
+  lastMonthLink.setAttribute("id", "lastMonthLink");
   lastMonthLink.setAttribute("href", "#");
   let lastMonthLinkText = document.createTextNode("< Previous Month");
   lastMonthLink.appendChild(lastMonthLinkText);
@@ -111,9 +114,11 @@ let makePreviousMonthLink = () => {
 
     event.preventDefault();
 
-    lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - increment++, currentDate.getDate());
+    lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
 
-    let datePassedLastMonth = getCurrentMonthData(lastMonth);
+    currentDate = new Date(lastMonth);
+
+    let datePassedLastMonth = getCurrentMonthData(currentDate);
 
     document.getElementById("calendar").textContent = "";
     document.getElementById("monthName").remove();
@@ -124,14 +129,13 @@ let makePreviousMonthLink = () => {
 
 };
 
-makePreviousMonthLink();
-
 let makeNextMonthLink = () => {
 
-  let nextMonth, increment = 1;
+  let nextMonth;
 
   // set last month link
   let nextMonthLink = document.createElement("a");
+  nextMonthLink.setAttribute("id", "nextMonthLink");
   nextMonthLink.setAttribute("href", "#");
   let nextMonthLinkText = document.createTextNode("Next Month >");
   nextMonthLink.appendChild(nextMonthLinkText);
@@ -141,9 +145,11 @@ let makeNextMonthLink = () => {
 
     event.preventDefault();
 
-    nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + increment++, currentDate.getDate());
+    nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
 
-    let datePassedNextMonth = getCurrentMonthData(nextMonth);
+    currentDate = new Date(nextMonth);
+
+    let datePassedNextMonth = getCurrentMonthData(currentDate);
 
     document.getElementById("calendar").textContent = "";
     document.getElementById("monthName").remove();
@@ -154,6 +160,7 @@ let makeNextMonthLink = () => {
 
 };
 
+makePreviousMonthLink();
 makeNextMonthLink();
 
 let datePassed = getCurrentMonthData(currentDate);
