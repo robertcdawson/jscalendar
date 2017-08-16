@@ -76,12 +76,13 @@ let makeCalendarUI = (currentMonthData) => {
 
   makeCalendarHeadings();
 
+  let dayCounter = 1;
   // generate day divs with day numbers if applicable for current month
   for (let i = 0; i < daysToAddToCalendar; i++) {
 
     // TODO: Fix logic
     if (i >= firstDayOfCurrentMonth) {
-      makeDayNumDiv(i - 1);
+      makeDayNumDiv(dayCounter++);
     }
     else {
       makeDayNumDiv();
