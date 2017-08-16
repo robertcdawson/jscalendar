@@ -133,7 +133,7 @@ let makeNextMonthLink = () => {
 
   let nextMonth;
 
-  // set last month link
+  // set next month link
   let nextMonthLink = document.createElement("a");
   nextMonthLink.setAttribute("id", "nextMonthLink");
   nextMonthLink.setAttribute("href", "#");
